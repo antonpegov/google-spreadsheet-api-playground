@@ -3,6 +3,7 @@
   <head>
     <title>Google Sheets API Quickstart</title>
     <meta charset='utf-8' />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   </head>
   <body>
     <p>Google Sheets API Quickstart</p>
@@ -11,8 +12,16 @@
     <button id="authorize-button" style="display: none;">Authorize</button>
     <button id="signout-button" style="display: none;">Sign Out</button>
 
-    <pre id="content"></pre>
+    <pre id="content" style="font-size:16px"></pre>
 
+
+    <iframe 
+        id="googleForm" onload="cleanGoogleForm(event,this)"
+        src="https://docs.google.com/forms/d/e/1FAIpQLSfckvaigVUQqNAxm4m4_2ZmVr6dVcvV0J3-6gWPMr0WU9MQAA/viewform?embedded=true" 
+        width="900" height="1100" frameborder="0" marginheight="0" marginwidth="0">
+        Загрузка формы...
+    </iframe>
+    
     <script type="text/javascript">
       // Client ID and API key from the Developer Console
       var CLIENT_ID = '737614165625-dg8u9k2nlt9i9bb2vh77a8sf2u5gosq1.apps.googleusercontent.com';
@@ -31,7 +40,7 @@
        *  On load, called to load the auth2 library and API client library.
        */
       function handleClientLoad() {
-        gapi.load('client:auth2', initClient);
+        gapi.load('client:auth2', initClient);        
       }
 
       /**
@@ -103,7 +112,7 @@
         gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: '1RhVYWFnF-t7Nl1alHxyhcUvqMmgi6uR3J_ChanUEOBQ',
           range: 'Ответы на форму (1)!B1:D',
-        }).then(function(response) {debugger
+        }).then(function(response) {
           var range = response.result;
           if (range.values.length > 0) {
             appendPre(range.values[0][1]+','+ range.values[0][0]+','+ range.values[0][2]+':');
@@ -118,6 +127,12 @@
         }, function(response) {
           appendPre('Error: ' + response.result.error.message);
         });
+      }
+
+      function cleanGoogleForm(e,self){
+        // Нет доступа к форме из-за CORP
+        //$(self).find('.freebirdHeaderMast').display('none');
+
       }
 
     </script>
